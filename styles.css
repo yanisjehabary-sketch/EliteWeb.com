@@ -157,6 +157,7 @@ footer { padding: 3rem 5%; border-top: 1px solid var(--border); text-align: cent
 .features { list-style: none; margin: 2rem 0; text-align: left; }
 .features li { margin-bottom: 0.8rem; font-size: 0.95rem; color: var(--text-muted); display: flex; align-items: center; gap: 0.8rem; }
 .features li i.fa-check { color: #22c55e; }
+.card .btn { padding: 1.2rem 2.5rem; font-size: 1.1rem; width: 100%; justify-content: center; margin-top: 1rem; }
 
 /* Portfolio Page */
 .portfolio-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 2rem; max-width: 1200px; margin: 0 auto 6rem; padding: 0 5%; }
