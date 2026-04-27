@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nos Offres | EliteWeb.corp</title>
+    <meta name="description" content="Découvrez nos formules de création de sites web et notre processus de travail.">
+    <link rel="stylesheet" href="styles.css?v=3">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-G6VK3KJWB7"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-G6VK3KJWB7');
+    </script>
+</head>
+<body>
+    <div id="preloader">
+        <div class="loader-logo">EliteWeb<span>.corp</span></div>
+        <div class="loader-quote" id="loader-quote"></div>
+    </div>
+    <div class="cursor-dot"></div>
+    <div class="cursor-outline"></div>
+
+    <div class="bg-animation">
+        <div class="bg-mesh"></div>
+    </div>
+
+    <nav class="navbar">
+        <a href="index.html" class="logo">
+            <i class="fa-solid fa-cube"></i><span class="logo-name">EliteWeb<span class="logo-corp">.corp</span></span>
+        </a>
+        <ul class="nav-links">
+            <li><a href="index.html"><i class="fa-solid fa-house"></i> Accueil</a></li>
+            <li><a href="services.html" class="active"><i class="fa-solid fa-tags"></i> Nos Offres</a></li>
+            <li><a href="portfolio.html"><i class="fa-solid fa-laptop-code"></i> Portfolio</a></li>
+            <li><a href="roi.html"><i class="fa-solid fa-chart-line"></i> ROI</a></li>
+            <li><a href="contact.html"><i class="fa-solid fa-phone"></i> Contact</a></li>
+            <li><a href="services.html#tarifs" class="btn-nav">Commander</a></li>
+        </ul>
+    </nav>
+
+    <section id="tarifs" class="pricing" style="padding-top: 150px;">
+        <div class="section-header">
+            <h2>Choisissez Votre <span class="highlight">Formule</span></h2>
+            <p>Passez commande directement en ligne avec nos paiements sécurisés.</p>
+        </div>
+        
+        <div class="pricing-cards">
+            <div class="card basic" data-plan="Essentiel">
+                <div class="card-header">
+                    <h3>Essentiel</h3>
+                    <div class="price">249 €</div>
+                    <p>Idéal pour démarrer</p>
+                </div>
+                <ul class="features">
+                    <li><i class="fa-solid fa-check"></i> Site vitrine 1 page</li>
+                    <li><i class="fa-solid fa-check"></i> Design Responsive</li>
+                    <li><i class="fa-solid fa-check"></i> Formulaire de contact</li>
+                    <li><i class="fa-solid fa-xmark text-muted"></i> Optimisation SEO Avancée</li>
+                    <li><i class="fa-solid fa-xmark text-muted"></i> Intégration Google Analytics</li>
+                </ul>
+                <button class="btn btn-card order-btn">Commander</button>
+            </div>
+
+            <div class="card standard popular" data-plan="Standard">
+                <div class="badge">Plus Populaire</div>
+                <div class="card-header">
+                    <h3>Pro</h3>
+                    <div class="price">499 €</div>
+                    <p>Le compromis parfait</p>
+                </div>
+                <ul class="features">
+                    <li style="color:#0ea5e9;font-weight:700;"><i class="fa-solid fa-plus" style="color:#0ea5e9;"></i> Tout inclus formule essentielle</li>
+                    <li><i class="fa-solid fa-check"></i> Site vitrine multi-pages (jusqu'à 5)</li>
+                    <li><i class="fa-solid fa-check"></i> Design Premium sur-mesure</li>
+                    <li><i class="fa-solid fa-check"></i> SEO de base inclus</li>
+                    <li><i class="fa-solid fa-check"></i> Intégration Google Analytics</li>
+                </ul>
+                <button class="btn btn-primary order-btn">Commander</button>
+            </div>
+
+            <div class="card premium" data-plan="Premium">
+                <div class="card-header">
+                    <h3>Premium</h3>
+                    <div class="price">999 €</div>
+                    <p>L'excellence digitale</p>
+                </div>
+                <ul class="features">
+                    <li><i class="fa-solid fa-check"></i> Site E-commerce / Sur-mesure</li>
+                    <li><i class="fa-solid fa-check"></i> Système de réservation / Paiement</li>
+                    <li><i class="fa-solid fa-check"></i> SEO Avancé & Vitesse optimisée</li>
+                    <li><i class="fa-solid fa-check"></i> Support prioritaire 24/7</li>
+                </ul>
+                <button class="btn btn-card order-btn">Commander</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal de Paiement -->
+    <div id="payment-modal" class="modal">
+        <div class="modal-content glass-effect">
+            <span class="close-modal">&times;</span>
+            <h2>Validation de commande</h2>
+            <p>Formule sélectionnée : <strong id="selected-plan" class="highlight">Pro</strong></p>
+            
+            <div class="payment-options">
+                <h3>Choisissez votre méthode de paiement :</h3>
+                <div class="payment-method active" id="pay-apple">
+                    <i class="fa-brands fa-apple"></i>
+                    <span>Apple Pay</span>
+                </div>
+                <div class="payment-method" id="pay-card">
+                    <i class="fa-regular fa-credit-card"></i>
+                    <span>Carte Bancaire</span>
+                </div>
+                <div class="payment-method" id="pay-google">
+                    <i class="fa-brands fa-google"></i>
+                    <span>Google Wallet</span>
+                </div>
+                <div class="payment-method" id="pay-samsung">
+                    <i class="fa-solid fa-mobile-screen-button"></i>
+                    <span>Samsung Wallet</span>
+                </div>
+            </div>
+
+            <div id="card-form" class="payment-form">
+                <p style="text-align:center; color:var(--text-muted); margin-bottom: 1rem;">Paiement rapide et sécurisé via votre portefeuille numérique.</p>
+                <button class="btn btn-primary full-width" style="font-size:1.2rem; padding: 1rem;">
+                    <i class="fa-brands fa-apple"></i> Payer avec Apple Pay
+                </button>
+            </div>
+            
+            <div id="transfer-info" class="payment-form hidden">
+                <p>Veuillez effectuer le virement sur ce compte :</p>
+                <div class="iban-box">
+                    <strong>IBAN :</strong> FR76 1234 5678 9101 1121 3141 516<br>
+                    <strong>BIC :</strong> ABCDEFGH
+                </div>
+                <button class="btn btn-primary full-width">J'ai effectué le virement</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- WhatsApp -->
+    <div class="whatsapp-container">
+        <div class="wa-menu" id="wa-menu">
+            <a href="tel:0767136242" class="wa-menu-item"><i class="fa-solid fa-phone"></i> Appeler le 07 67 13 62 42</a>
+            <a href="https://wa.me/33767136242" class="wa-menu-item" target="_blank"><i class="fa-brands fa-whatsapp"></i> Message WhatsApp</a>
+        </div>
+        <button class="whatsapp-float" id="wa-trigger"><i class="fa-brands fa-whatsapp"></i></button>
+    </div>
+
+    <div class="logo-marquee-container">
+        <p class="marquee-title">ILS NOUS FONT DÉJÀ CONFIANCE</p>
+        <div class="logo-marquee">
+            <span class="marquee-item">DreamVoyage</span>
+            <span class="marquee-item">DreamVoyage</span>
+            <span class="marquee-item">DreamVoyage</span>
+            <span class="marquee-item">DreamVoyage</span>
+            <span class="marquee-item">DreamVoyage</span>
+            <span class="marquee-item">DreamVoyage</span>
+            <span class="marquee-item">DreamVoyage</span>
+            <span class="marquee-item">DreamVoyage</span>
+            <span class="marquee-item">DreamVoyage</span>
+            <span class="marquee-item">DreamVoyage</span>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2026 EliteWeb.corp. Tous droits réservés.</p>
+        </div>
+    </footer>
+    <script type="module" src="script.js?v=3"></script>
+</body>
+</html>

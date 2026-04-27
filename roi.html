@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulateur ROI | EliteWeb.corp</title>
+    <meta name="description" content="Calculez combien votre site obsolète vous fait perdre, et combien un site EliteWeb vous rapporterait chaque mois.">
+    <link rel="stylesheet" href="styles.css?v=5">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* ===== PAGE ROI - STYLES SPÉCIFIQUES ===== */
+        .roi-page-hero {
+            padding: 10rem 5% 3rem;
+            text-align: center;
+            position: relative;
+        }
+        .roi-page-hero h1 {
+            font-size: clamp(2.8rem, 5vw, 4.5rem);
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+        .roi-page-hero p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto 3rem;
+        }
+
+        /* DOUBLE SIMULATEUR */
+        .roi-dual-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 5% 6rem;
+        }
+
+        /* CARD PERTE */
+        .loss-card {
+            background: rgba(17, 24, 39, 0.7);
+            border: 1px solid rgba(239, 68, 68, 0.25);
+            border-radius: 28px;
+            padding: 2.5rem;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        .loss-card::before {
+            content: '';
+            position: absolute;
+            top: -80px; right: -80px;
+            width: 250px; height: 250px;
+            background: rgba(239, 68, 68, 0.08);
+            border-radius: 50%;
+            filter: blur(40px);
+        }
+        .loss-card-header {
+            display: flex; align-items: center; gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        .loss-icon {
+            width: 52px; height: 52px;
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 14px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.3rem; color: #ef4444;
+        }
+        .loss-card-header h2 { font-size: 1.5rem; margin: 0; font-family: 'Space Grotesk', sans-serif; }
+        .loss-card-header p { color: var(--text-muted); font-size: 0.85rem; margin: 0; }
+
+        /* Champs sélection */
+        .sim-select-group { margin-bottom: 1.8rem; }
+        .sim-select-group label { display: block; color: rgba(255,255,255,0.65); font-size: 0.85rem; margin-bottom: 0.6rem; }
+        .sim-select {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            color: #fff;
+            font-family: inherit;
+            font-size: 0.95rem;
+            cursor: pointer;
+            outline: none;
+            transition: 0.3s;
+        }
+        .sim-select:focus { border-color: #ef4444; }
+        .sim-select option { background: #0f172a; }
+
+        /* Résultats perte */
+        .loss-results {
+            background: rgba(239, 68, 68, 0.06);
+            border: 1px solid rgba(239, 68, 68, 0.15);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-top: 1.5rem;
+        }
+        .loss-main-number {
+            font-size: 3.5rem;
+            font-weight: 800;
+            font-family: 'Space Grotesk', sans-serif;
+            color: #ef4444;
+            text-align: center;
+            margin: 0.5rem 0;
+            transition: 0.4s;
+        }
+        .loss-main-label { text-align: center; color: rgba(255,255,255,0.5); font-size: 0.85rem; margin-bottom: 1.5rem; }
+        .loss-breakdown { display: flex; flex-direction: column; gap: 0.8rem; }
+        .loss-row {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 0.7rem 1rem;
+            background: rgba(255,255,255,0.03);
+            border-radius: 10px;
+            font-size: 0.9rem;
+        }
+        .loss-row span:first-child { color: rgba(255,255,255,0.6); }
+        .loss-row span:last-child { color: #ef4444; font-weight: 700; font-family: 'Space Grotesk', sans-serif; }
+        .loss-cta { margin-top: 1.5rem; width: 100%; justify-content: center; background: linear-gradient(135deg, #ef4444, #f97316); box-shadow: 0 4px 20px rgba(239, 68, 68, 0.3); }
+        .loss-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(239, 68, 68, 0.4); }
+
+        /* CARD ROI */
+        .roi-gain-card {
+            background: rgba(17, 24, 39, 0.7);
+            border: 1px solid rgba(14, 165, 233, 0.25);
+            border-radius: 28px;
+            padding: 2.5rem;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        .roi-gain-card::before {
+            content: '';
+            position: absolute;
+            top: -80px; right: -80px;
+            width: 250px; height: 250px;
+            background: rgba(168, 85, 247, 0.08);
+            border-radius: 50%;
+            filter: blur(40px);
+        }
+        .gain-card-header {
+            display: flex; align-items: center; gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        .gain-icon {
+            width: 52px; height: 52px;
+            background: rgba(14, 165, 233, 0.15);
+            border: 1px solid rgba(14, 165, 233, 0.3);
+            border-radius: 14px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.3rem; color: var(--primary);
+        }
+        .gain-card-header h2 { font-size: 1.5rem; margin: 0; font-family: 'Space Grotesk', sans-serif; }
+        .gain-card-header p { color: var(--text-muted); font-size: 0.85rem; margin: 0; }
+
+        .gain-results {
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.08), rgba(14, 165, 233, 0.08));
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-top: 1.5rem;
+        }
+        .gain-main-number {
+            font-size: 3.5rem;
+            font-weight: 800;
+            font-family: 'Space Grotesk', sans-serif;
+            background: linear-gradient(135deg, #a855f7, #0ea5e9);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-align: center;
+            margin: 0.5rem 0;
+            transition: 0.4s;
+        }
+        .gain-main-label { text-align: center; color: rgba(255,255,255,0.5); font-size: 0.85rem; margin-bottom: 1.5rem; }
+        .gain-breakdown { display: flex; flex-direction: column; gap: 0.8rem; }
+        .gain-row {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 0.7rem 1rem;
+            background: rgba(255,255,255,0.03);
+            border-radius: 10px;
+            font-size: 0.9rem;
+        }
+        .gain-row span:first-child { color: rgba(255,255,255,0.6); }
+        .gain-row span:last-child { color: #a855f7; font-weight: 700; font-family: 'Space Grotesk', sans-serif; }
+
+        /* BOTTOM CTA */
+        .roi-page-cta {
+            text-align: center;
+            padding: 4rem 5%;
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.08), rgba(14, 165, 233, 0.08));
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 6rem;
+        }
+        .roi-page-cta h2 { font-size: 2.5rem; margin-bottom: 1rem; font-family: 'Space Grotesk', sans-serif; }
+        .roi-page-cta p { color: var(--text-muted); font-size: 1.1rem; margin-bottom: 2.5rem; max-width: 550px; margin-left: auto; margin-right: auto; }
+
+        /* SLIDER styles réutilisés */
+        .roi-field { margin-bottom: 1.8rem; }
+        .roi-field label { display: block; color: rgba(255,255,255,0.65); font-size: 0.85rem; margin-bottom: 0.6rem; }
+        .roi-slider-wrap { }
+        .roi-value-display { display: flex; justify-content: flex-end; color: #fff; font-size: 1.2rem; font-weight: 700; font-family: 'Space Grotesk', sans-serif; margin-bottom: 0.5rem; }
+        .roi-value-display span { color: var(--primary); margin-right: 0.3rem; }
+
+        @media (max-width: 1000px) {
+            .roi-dual-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-G6VK3KJWB7"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-G6VK3KJWB7');
+    </script>
+</head>
+<body>
+    <div id="preloader">
+        <div class="loader-logo">EliteWeb<span>.corp</span></div>
+        <div class="loader-quote" id="loader-quote"></div>
+    </div>
+    <div class="cursor-dot"></div>
+    <div class="cursor-outline"></div>
+    <div class="bg-animation"><div class="bg-mesh"></div></div>
+
+    <nav class="navbar">
+        <a href="index.html" class="logo">
+            <i class="fa-solid fa-cube"></i><span class="logo-name">EliteWeb<span class="logo-corp">.corp</span></span>
+        </a>
+        <ul class="nav-links">
+            <li><a href="index.html"><i class="fa-solid fa-house"></i> Accueil</a></li>
+            <li><a href="services.html"><i class="fa-solid fa-tags"></i> Nos Offres</a></li>
+            <li><a href="portfolio.html"><i class="fa-solid fa-laptop-code"></i> Portfolio</a></li>
+            <li><a href="roi.html" class="active"><i class="fa-solid fa-chart-line"></i> ROI</a></li>
+            <li><a href="contact.html"><i class="fa-solid fa-phone"></i> Contact</a></li>
+            <li><a href="services.html#tarifs" class="btn-nav">Commander</a></li>
+        </ul>
+    </nav>
+
+    <!-- HERO -->
+    <div class="roi-page-hero">
+        <div class="roi-badge" style="display:inline-flex;align-items:center;gap:0.5rem;background:rgba(14,165,233,0.12);border:1px solid rgba(14,165,233,0.3);color:var(--primary);padding:0.5rem 1.5rem;border-radius:100px;font-size:0.8rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:1.5rem;">
+            <i class="fa-solid fa-calculator"></i> Outils Gratuits
+        </div>
+        <h1>Votre site vous <span class="highlight">coûte</span> ou vous <span style="background:linear-gradient(135deg,#a855f7,#0ea5e9);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">rapporte</span> ?</h1>
+        <p>Deux simulateurs pour comprendre l'impact réel de votre présence web sur votre chiffre d'affaires.</p>
+    </div>
+
+    <!-- DUAL SIMULATOR -->
+    <div class="roi-dual-grid">
+
+        <!-- SIMULATEUR PERTE -->
+        <div class="loss-card">
+            <div class="loss-card-header">
+                <div class="loss-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                <div>
+                    <h2>💸 Ce que vous perdez</h2>
+                    <p>Coût de votre site obsolète actuel</p>
+                </div>
+            </div>
+
+            <div class="sim-select-group">
+                <label>Secteur d'activité</label>
+                <select class="sim-select" id="loss-sector">
+                    <option value="restaurant">Restaurant / Food</option>
+                    <option value="artisan">Artisan / Services</option>
+                    <option value="commerce" selected>Commerce / Retail</option>
+                    <option value="immobilier">Immobilier</option>
+                    <option value="sante">Santé / Bien-être</option>
+                    <option value="coaching">Coaching / Formation</option>
+                    <option value="ecommerce">E-commerce</option>
+                </select>
+            </div>
+
+            <div class="roi-field">
+                <label>Visiteurs uniques / mois sur votre site actuel</label>
+                <div class="roi-slider-wrap">
+                    <div class="roi-value-display"><span id="loss-visitors-val">300</span> visiteurs/mois</div>
+                    <input type="range" id="loss-visitors" min="0" max="10000" step="100" value="300">
+                </div>
+            </div>
+
+            <div class="roi-field">
+                <label>Panier moyen / valeur d'un client (€)</label>
+                <div class="roi-slider-wrap">
+                    <div class="roi-value-display"><span id="loss-basket-val">120</span> €</div>
+                    <input type="range" id="loss-basket" min="10" max="5000" step="10" value="120">
+                </div>
+            </div>
+
+            <div class="roi-field">
+                <label>Votre taux de conversion actuel (%)</label>
+                <div class="roi-slider-wrap">
+                    <div class="roi-value-display"><span id="loss-conv-val" style="color:#ef4444">1.0</span>%</div>
+                    <input type="range" id="loss-conv" min="0.1" max="10" step="0.1" value="1"
+                        style="background: linear-gradient(to right, rgba(239,68,68,0.4), rgba(239,68,68,0.1));">
+                </div>
+                <p style="font-size:0.75rem;color:rgba(255,255,255,0.35);margin-top:0.4rem;">Un site optimisé atteint 3–5%. Estimez le vôtre honnêtement.</p>
+            </div>
+
+            <div class="loss-results">
+                <div style="color:rgba(255,255,255,0.5);font-size:0.75rem;text-align:center;text-transform:uppercase;letter-spacing:1px;margin-bottom:0.5rem;">Argent perdu chaque mois</div>
+                <div class="loss-main-number" id="loss-monthly">-2 160 €</div>
+                <div class="loss-main-label">à cause d'un site non-optimisé</div>
+                <div class="loss-breakdown">
+                    <div class="loss-row">
+                        <span>Clients potentiels manqués/mois</span>
+                        <span id="loss-clients">18</span>
+                    </div>
+                    <div class="loss-row">
+                        <span>Perte annuelle estimée</span>
+                        <span id="loss-annual">-25 920 €</span>
+                    </div>
+                    <div class="loss-row">
+                        <span>Taux de rebond moyen (site obsolète)</span>
+                        <span id="loss-bounce">72%</span>
+                    </div>
+                    <div class="loss-row">
+                        <span>Taux de conversion perdu</span>
+                        <span id="loss-conv-lost">-5.2%</span>
+                    </div>
+                </div>
+            </div>
+
+            <a href="services.html" class="btn loss-cta" style="display:flex;margin-top:1.5rem;">
+                <i class="fa-solid fa-rocket"></i> Arrêter les pertes maintenant
+            </a>
+
+            <!-- Ticker remplissage -->
+            <div style="flex:1;display:flex;align-items:center;justify-content:center;margin-top:1.2rem;background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.18);border-radius:16px;padding:1.2rem;text-align:center;flex-direction:column;gap:0.4rem;">
+                <div style="font-size:0.68rem;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:1.5px;">⏱ Argent perdu depuis l'ouverture de cette page</div>
+                <div id="loss-ticker" style="font-size:2.2rem;font-weight:800;font-family:'Space Grotesk',sans-serif;color:#ef4444;line-height:1;">-0,00 €</div>
+                <div style="font-size:0.7rem;color:rgba(255,255,255,0.25);">basé sur vos chiffres renseignés</div>
+            </div>
+        </div>
+
+        <!-- SIMULATEUR GAIN -->
+        <div class="roi-gain-card">
+            <div class="gain-card-header">
+                <div class="gain-icon"><i class="fa-solid fa-trophy"></i></div>
+                <div>
+                    <h2>🚀 Ce que vous gagneriez</h2>
+                    <p>Avec un site EliteWeb optimisé</p>
+                </div>
+            </div>
+
+            <div class="roi-field">
+                <label>Chiffre d'affaires mensuel actuel</label>
+                <div class="roi-slider-wrap">
+                    <div class="roi-value-display"><span id="gain-revenue-val">5 000</span> €/mois</div>
+                    <input type="range" id="gain-revenue" min="500" max="100000" step="500" value="5000">
+                </div>
+            </div>
+
+            <div class="roi-field">
+                <label>Visiteurs / mois actuels</label>
+                <div class="roi-slider-wrap">
+                    <div class="roi-value-display"><span id="gain-visitors-val">300</span> visiteurs</div>
+                    <input type="range" id="gain-visitors" min="0" max="10000" step="100" value="300">
+                </div>
+            </div>
+
+            <div class="roi-field">
+                <label>Taux de conversion actuel</label>
+                <div class="roi-slider-wrap">
+                    <div class="roi-value-display"><span id="gain-conv-val">1.0</span>%</div>
+                    <input type="range" id="gain-conv" min="0.1" max="10" step="0.1" value="1">
+                </div>
+            </div>
+
+            <div class="gain-results">
+                <div style="color:rgba(255,255,255,0.5);font-size:0.75rem;text-align:center;text-transform:uppercase;letter-spacing:1px;margin-bottom:0.5rem;">Gain mensuel estimé</div>
+                <div class="gain-main-number" id="gain-monthly">+3 750 €</div>
+                <div class="gain-main-label">avec un site EliteWeb Pro</div>
+                <div class="gain-breakdown">
+                    <div class="gain-row">
+                        <span>Nouveaux clients/mois</span>
+                        <span id="gain-clients">+18</span>
+                    </div>
+                    <div class="gain-row">
+                        <span>Gain annuel</span>
+                        <span id="gain-annual">+45 000 €</span>
+                    </div>
+                    <div class="gain-row">
+                        <span>Retour sur investissement</span>
+                        <span id="gain-roi-pct">752%</span>
+                    </div>
+                    <div class="gain-row">
+                        <span>Site rentabilisé en</span>
+                        <span id="gain-payback">2 mois</span>
+                    </div>
+                </div>
+            </div>
+
+            <a href="services.html" class="btn btn-primary" style="width:100%;justify-content:center;margin-top:1.5rem;font-size:1rem;padding:1rem;">
+                <i class="fa-solid fa-chart-line"></i> Voir les offres
+            </a>
+
+            <!-- Preuve sociale & garanties -->
+            <div style="margin-top:1.5rem;display:flex;flex-direction:column;gap:0.8rem;">
+                <div style="display:flex;align-items:center;gap:1rem;padding:0.9rem 1.2rem;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:12px;">
+                    <div style="width:36px;height:36px;background:rgba(34,197,94,0.15);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                        <i class="fa-solid fa-shield-halved" style="color:#22c55e;font-size:1rem;"></i>
+                    </div>
+                    <div>
+                        <div style="font-size:0.85rem;font-weight:700;color:#fff;">Satisfaction 100% garantie</div>
+                        <div style="font-size:0.75rem;color:rgba(255,255,255,0.4);">Révisions illimitées jusqu'à votre validation totale</div>
+                    </div>
+                </div>
+                <div style="display:flex;align-items:center;gap:1rem;padding:0.9rem 1.2rem;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:12px;">
+                    <div style="width:36px;height:36px;background:rgba(14,165,233,0.15);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                        <i class="fa-solid fa-bolt" style="color:#0ea5e9;font-size:1rem;"></i>
+                    </div>
+                    <div>
+                        <div style="font-size:0.85rem;font-weight:700;color:#fff;">Livraison rapide</div>
+                        <div style="font-size:0.75rem;color:rgba(255,255,255,0.4);">Votre site en ligne en moins de 14 jours ouvrés</div>
+                    </div>
+                </div>
+                <div style="display:flex;align-items:center;gap:1rem;padding:0.9rem 1.2rem;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:12px;">
+                    <div style="width:36px;height:36px;background:rgba(168,85,247,0.15);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                        <i class="fa-solid fa-headset" style="color:#a855f7;font-size:1rem;"></i>
+                    </div>
+                    <div>
+                        <div style="font-size:0.85rem;font-weight:700;color:#fff;">Support 24/7 inclus</div>
+                        <div style="font-size:0.75rem;color:rgba(255,255,255,0.4);">On reste à vos côtés même après la mise en ligne</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CTA BAS DE PAGE -->
+    <div class="roi-page-cta">
+        <h2>Votre concurrent a déjà <span class="highlight">un site moderne.</span></h2>
+        <p>Chaque jour sans un site optimisé, c'est des clients qui choisissent vos concurrents. Agissez maintenant.</p>
+        <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
+            <a href="services.html" class="btn btn-primary" style="font-size:1.1rem;padding:1rem 2.5rem;">
+                <i class="fa-solid fa-rocket"></i> Démarrer mon projet
+            </a>
+            <a href="contact.html" class="btn" style="border:1px solid var(--border);color:#fff;font-size:1.1rem;padding:1rem 2.5rem;">
+                <i class="fa-solid fa-phone"></i> Nous appeler
+            </a>
+        </div>
+    </div>
+
+    <!-- Marquee -->
+    <div class="logo-marquee-container">
+        <p class="marquee-title">ILS NOUS FONT DÉJÀ CONFIANCE</p>
+        <div class="logo-marquee">
+            <span class="marquee-item">DreamVoyage</span>
+            <span class="marquee-item">DreamVoyage</span>
+            <span class="marquee-item">DreamVoyage</span>
+            <span class="marquee-item">DreamVoyage</span>
+            <span class="marquee-item">DreamVoyage</span>
+            <span class="marquee-item">DreamVoyage</span>
+            <span class="marquee-item">DreamVoyage</span>
+            <span class="marquee-item">DreamVoyage</span>
+            <span class="marquee-item">DreamVoyage</span>
+            <span class="marquee-item">DreamVoyage</span>
+        </div>
+    </div>
+
+    <!-- WhatsApp -->
+    <div class="whatsapp-container">
+        <div class="wa-menu" id="wa-menu">
+            <a href="tel:0767136242" class="wa-menu-item"><i class="fa-solid fa-phone"></i> Appeler le 07 67 13 62 42</a>
+            <a href="https://wa.me/33767136242" class="wa-menu-item" target="_blank"><i class="fa-brands fa-whatsapp"></i> Message WhatsApp</a>
+        </div>
+        <button class="whatsapp-float" id="wa-trigger"><i class="fa-brands fa-whatsapp"></i></button>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2026 EliteWeb.corp. Tous droits réservés.</p>
+        </div>
+    </footer>
+
+    <script type="module" src="script.js?v=5"></script>
+    <script>
+    // ROI Page Calculators
+    document.addEventListener('DOMContentLoaded', () => {
+        const fmt = (n) => Math.abs(Math.round(n)).toLocaleString('fr-FR');
+
+        // Sector data: [bounce rate, conv loss multiplier, description]
+        const sectorData = {
+            restaurant:  { bounce: 78, convLoss: 6.8, avgConv: 0.8 },
+            artisan:     { bounce: 68, convLoss: 5.2, avgConv: 1.2 },
+            commerce:    { bounce: 72, convLoss: 5.5, avgConv: 1.0 },
+            immobilier:  { bounce: 65, convLoss: 4.8, avgConv: 1.5 },
+            sante:       { bounce: 70, convLoss: 5.0, avgConv: 1.3 },
+            coaching:    { bounce: 74, convLoss: 6.0, avgConv: 0.9 },
+            ecommerce:   { bounce: 80, convLoss: 7.5, avgConv: 0.6 },
+        };
+
+        // ---- LOSS CALCULATOR ----
+        function updateLoss() {
+            const visitors = parseFloat(document.getElementById('loss-visitors').value);
+            const basket = parseFloat(document.getElementById('loss-basket').value);
+            const conv = parseFloat(document.getElementById('loss-conv').value);
+            const sector = document.getElementById('loss-sector').value;
+            const data = sectorData[sector];
+
+            document.getElementById('loss-visitors-val').textContent = fmt(visitors);
+            document.getElementById('loss-basket-val').textContent = fmt(basket);
+            document.getElementById('loss-conv-val').textContent = conv.toFixed(1);
+
+            // Potential clients with an optimised site (conv x2.5, capped at 5%)
+            const optimalConv = Math.min(conv * 2.5, 5) / 100;
+            const currentConv = conv / 100;
+            const lostClients = Math.round(visitors * (optimalConv - currentConv));
+            const monthlyLoss = Math.round(Math.max(lostClients, 0) * basket);
+            const annualLoss = monthlyLoss * 12;
+
+            document.getElementById('loss-monthly').textContent = '-' + fmt(monthlyLoss) + ' €';
+            document.getElementById('loss-clients').textContent = Math.max(lostClients, 0);
+            document.getElementById('loss-annual').textContent = '-' + fmt(annualLoss) + ' €';
+            document.getElementById('loss-bounce').textContent = data.bounce + '%';
+            document.getElementById('loss-conv-lost').textContent = '-' + (optimalConv * 100 - conv).toFixed(1) + '%';
+
+            const el = document.getElementById('loss-monthly');
+            el.style.transform = 'scale(1.06)';
+            setTimeout(() => { el.style.transform = 'scale(1)'; }, 200);
+        }
+
+        // ---- GAIN CALCULATOR ----
+        function updateGain() {
+            const revenue = parseFloat(document.getElementById('gain-revenue').value);
+            const visitors = parseFloat(document.getElementById('gain-visitors').value);
+            const conv = parseFloat(document.getElementById('gain-conv').value);
+
+            document.getElementById('gain-revenue-val').textContent = fmt(revenue);
+            document.getElementById('gain-visitors-val').textContent = fmt(visitors);
+            document.getElementById('gain-conv-val').textContent = conv.toFixed(1);
+
+            const avgOrderValue = revenue / Math.max(visitors * (conv / 100), 1);
+            const newVisitors = visitors * 2.5;
+            const newConvRate = Math.min(conv * 2.5, 10) / 100;
+            const newClients = Math.round(newVisitors * newConvRate - visitors * (conv / 100));
+            const monthlyGain = Math.round(newClients * avgOrderValue);
+            const annualGain = monthlyGain * 12;
+            const roiPct = Math.round((annualGain / 499) * 100);
+            const payback = monthlyGain > 0 ? Math.ceil(499 / monthlyGain) : '—';
+
+            document.getElementById('gain-monthly').textContent = '+' + fmt(monthlyGain) + ' €';
+            document.getElementById('gain-clients').textContent = '+' + fmt(newClients);
+            document.getElementById('gain-annual').textContent = '+' + fmt(annualGain) + ' €';
+            document.getElementById('gain-roi-pct').textContent = fmt(roiPct) + '%';
+            document.getElementById('gain-payback').textContent = typeof payback === 'number' ? payback + ' mois' : payback;
+
+            const el = document.getElementById('gain-monthly');
+            el.style.transform = 'scale(1.06)';
+            setTimeout(() => { el.style.transform = 'scale(1)'; }, 200);
+        }
+
+        // Event listeners
+        ['loss-visitors', 'loss-basket', 'loss-conv', 'loss-sector'].forEach(id => {
+            document.getElementById(id).addEventListener('input', updateLoss);
+            document.getElementById(id).addEventListener('change', updateLoss);
+        });
+        ['gain-revenue', 'gain-visitors', 'gain-conv'].forEach(id => {
+            document.getElementById(id).addEventListener('input', updateGain);
+        });
+
+        updateLoss();
+        updateGain();
+
+        // Ticker perte en temps réel
+        const pageOpenTime = Date.now();
+        setInterval(() => {
+            const visitors = parseFloat(document.getElementById('loss-visitors').value) || 0;
+            const basket = parseFloat(document.getElementById('loss-basket').value) || 0;
+            const conv = parseFloat(document.getElementById('loss-conv').value) || 1;
+            const optimalConv = Math.min(conv * 2.5, 5) / 100;
+            const currentConv = conv / 100;
+            const lostClients = Math.max(visitors * (optimalConv - currentConv), 0);
+            const monthlyLoss = lostClients * basket;
+            const lossPerSecond = monthlyLoss / (30 * 86400);
+            const elapsedSeconds = (Date.now() - pageOpenTime) / 1000;
+            const accumulated = lossPerSecond * elapsedSeconds;
+            const ticker = document.getElementById('loss-ticker');
+            if (ticker) ticker.textContent = '-' + accumulated.toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+        }, 200);
+    });
+    </script>
+</body>
+</html>

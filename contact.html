@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact | EliteWeb.corp</title>
+    <meta name="description" content="Contactez notre agence web pour démarrer votre projet digital.">
+    <link rel="stylesheet" href="styles.css?v=3">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-G6VK3KJWB7"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-G6VK3KJWB7');
+    </script>
+</head>
+<body>
+    <div id="preloader">
+        <div class="loader-logo">EliteWeb<span>.corp</span></div>
+        <div class="loader-quote" id="loader-quote"></div>
+    </div>
+    <div class="cursor-dot"></div>
+    <div class="cursor-outline"></div>
+
+    <div class="bg-animation">
+        <div class="bg-mesh"></div>
+    </div>
+
+    <nav class="navbar">
+        <a href="index.html" class="logo">
+            <i class="fa-solid fa-cube"></i><span class="logo-name">EliteWeb<span class="logo-corp">.corp</span></span>
+        </a>
+        <ul class="nav-links">
+            <li><a href="index.html"><i class="fa-solid fa-house"></i> Accueil</a></li>
+            <li><a href="services.html"><i class="fa-solid fa-tags"></i> Nos Offres</a></li>
+            <li><a href="portfolio.html"><i class="fa-solid fa-laptop-code"></i> Portfolio</a></li>
+            <li><a href="roi.html"><i class="fa-solid fa-chart-line"></i> ROI</a></li>
+            <li><a href="contact.html" class="active"><i class="fa-solid fa-phone"></i> Contact</a></li>
+            <li><a href="services.html#tarifs" class="btn-nav">Commander</a></li>
+        </ul>
+    </nav>
+
+    <header class="page-header">
+        <h1>Contactez-<span class="highlight">nous</span></h1>
+        <p>Prêt à lancer votre projet ? Discutons-en dès aujourd'hui.</p>
+    </header>
+
+    <section class="contact-container">
+        <div class="contact-info">
+            <h2>Parlons de votre <span class="highlight">projet</span></h2>
+            <p>Notre équipe est à votre disposition pour vous conseiller et créer la solution digitale parfaite pour votre entreprise.</p>
+            
+            <div class="info-item">
+                <i class="fa-solid fa-phone"></i>
+                <div>
+                    <strong>Téléphone / WhatsApp</strong>
+                    <p>07 67 13 62 42</p>
+                </div>
+            </div>
+            
+            <div class="info-item">
+                <i class="fa-solid fa-envelope"></i>
+                <div>
+                    <strong>Email</strong>
+                    <p>yanis.jehabary@gmail.com</p>
+                </div>
+            </div>
+            
+            <div class="info-item">
+                <i class="fa-solid fa-location-dot"></i>
+                <div>
+                    <strong>Localisation</strong>
+                    <p>Disponible dans toute la France</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="contact-form">
+            <form id="main-contact-form">
+                <input type="hidden" name="access_key" value="fb2da683-521e-40e1-8efc-26a092b69430">
+                <div class="input-group">
+                    <label>Votre Nom</label>
+                    <input type="text" id="contact-name" name="name" placeholder="John Doe" required>
+                </div>
+                <div class="input-group">
+                    <label>Votre Email</label>
+                    <input type="email" id="contact-email" name="email" placeholder="john@example.com" required>
+                </div>
+                <div class="input-group">
+                    <label>Votre Message</label>
+                    <textarea id="contact-message" name="message" placeholder="Parlez-nous de votre projet..." required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary full-width">Envoyer le message</button>
+                <div id="form-success-msg" style="display:none; margin-top:1rem; padding:1rem; background:rgba(34,197,94,0.1); border:1px solid #22c55e; color:#22c55e; border-radius:10px; text-align:center;">
+                    <i class="fa-solid fa-circle-check"></i> Votre message a été envoyé avec succès !
+                </div>
+                <div class="form-trust-badges" style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-around; color: var(--text-muted); font-size: 0.85rem;">
+                    <span><i class="fa-solid fa-bolt" style="color: #facc15; margin-right: 5px;"></i> Réponse rapide (24h)</span>
+                    <span><i class="fa-solid fa-lock" style="color: var(--primary); margin-right: 5px;"></i> 100% Confidentiel</span>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <!-- WhatsApp -->
+    <div class="whatsapp-container">
+        <div class="wa-menu" id="wa-menu">
+            <a href="tel:0767136242" class="wa-menu-item"><i class="fa-solid fa-phone"></i> Appeler le 07 67 13 62 42</a>
+            <a href="https://wa.me/33767136242" class="wa-menu-item" target="_blank"><i class="fa-brands fa-whatsapp"></i> Message WhatsApp</a>
+        </div>
+        <button class="whatsapp-float" id="wa-trigger"><i class="fa-brands fa-whatsapp"></i></button>
+    </div>
+
+    <div class="logo-marquee-container">
+        <p class="marquee-title">ILS NOUS FONT DÉJÀ CONFIANCE</p>
+        <div class="logo-marquee">
+            <span class="marquee-item">DreamVoyage</span>
+            <span class="marquee-item">DreamVoyage</span>
+            <span class="marquee-item">DreamVoyage</span>
+            <span class="marquee-item">DreamVoyage</span>
+            <span class="marquee-item">DreamVoyage</span>
+            <span class="marquee-item">DreamVoyage</span>
+            <span class="marquee-item">DreamVoyage</span>
+            <span class="marquee-item">DreamVoyage</span>
+            <span class="marquee-item">DreamVoyage</span>
+            <span class="marquee-item">DreamVoyage</span>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2026 EliteWeb.corp. Tous droits réservés.</p>
+        </div>
+    </footer>
+    <script type="module" src="script.js?v=3"></script>
+</body>
+</html>
