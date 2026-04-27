@@ -1,0 +1,9 @@
+{
+  "name": "eliteweb-corp",
+  "version": "1.0.0",
+  "description": "EliteWeb.corp - L'excellence de l'IA",
+  "main": "index.html",
+  "dependencies": {
+    "stripe": "^14.0.0"
+  }
+}

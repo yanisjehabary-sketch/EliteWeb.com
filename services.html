@@ -92,7 +92,7 @@
                     <li><i class="fa-solid fa-xmark text-muted"></i> Optimisation SEO Avancée</li>
                     <li><i class="fa-solid fa-xmark text-muted"></i> Intégration Google Analytics</li>
                 </ul>
-                <button class="btn btn-card order-btn">Commander</button>
+                <button class="btn btn-card order-btn" onclick="createCheckoutSession('essentiel')">Commander</button>
             </div>
 
             <div class="card standard popular" data-plan="Standard">
@@ -124,7 +124,7 @@
                     <li><i class="fa-solid fa-check"></i> SEO Avancé & Vitesse optimisée</li>
                     <li><i class="fa-solid fa-check"></i> Support prioritaire 24/7</li>
                 </ul>
-                <button class="btn btn-card order-btn">Commander</button>
+                <button class="btn btn-card order-btn" onclick="createCheckoutSession('essentiel')">Commander</button>
             </div>
         </div>
     </section>
@@ -205,5 +205,7 @@
         </div>
     </footer>
     <script type="module" src="script.js?v=3"></script>
+    <script src="https://js.stripe.com/v3/"></script>
+    <script src="stripe-handler.js"></script>
 </body>
 </html>

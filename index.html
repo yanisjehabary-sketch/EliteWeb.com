@@ -210,7 +210,7 @@
                     <li><i class="fa-solid fa-xmark" style="color:var(--text-muted)"></i> Optimisation SEO Avancée</li>
                     <li><i class="fa-solid fa-xmark" style="color:var(--text-muted)"></i> Intégration Google Analytics</li>
                 </ul>
-                <a href="services.html#tarifs" class="btn" style="border:1px solid var(--border);color:#fff;width:100%;justify-content:center;">Commander</a>
+                <a href="javascript:void(0)" onclick="createCheckoutSession('essentiel')" class="btn" style="border:1px solid var(--border);color:#fff;width:100%;justify-content:center;">Commander</a>
             </div>
 
             <div class="card standard popular reveal">
@@ -227,7 +227,7 @@
                     <li><i class="fa-solid fa-check"></i> SEO de base inclus</li>
                     <li><i class="fa-solid fa-check"></i> Intégration Google Analytics</li>
                 </ul>
-                <a href="services.html#tarifs" class="btn btn-primary" style="width:100%;justify-content:center;">Commander</a>
+                <a href="javascript:void(0)" onclick="createCheckoutSession('pro')" class="btn btn-primary" style="width:100%;justify-content:center;">Commander</a>
             </div>
 
             <div class="card premium reveal">
@@ -242,7 +242,7 @@
                     <li><i class="fa-solid fa-check"></i> SEO Avancé &amp; Vitesse optimisée</li>
                     <li><i class="fa-solid fa-check"></i> Support prioritaire 24/7</li>
                 </ul>
-                <a href="services.html#tarifs" class="btn" style="border:1px solid var(--border);color:#fff;width:100%;justify-content:center;">Commander</a>
+                <a href="javascript:void(0)" onclick="createCheckoutSession('essentiel')" class="btn" style="border:1px solid var(--border);color:#fff;width:100%;justify-content:center;">Commander</a>
             </div>
         </div>
     </section>
@@ -272,5 +272,7 @@
     </footer>
 
     <script type="module" src="script.js?v=4"></script>
+    <script src="https://js.stripe.com/v3/"></script>
+    <script src="stripe-handler.js"></script>
 </body>
 </html>
