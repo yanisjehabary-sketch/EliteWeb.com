@@ -441,16 +441,6 @@ input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.2); }
     .roi-calculator { grid-template-columns: 1fr; }
 }
 
-/* Monkey Splat Animation HD */
-.monkey-container { position: fixed; inset: 0; z-index: 10000; pointer-events: none; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-.monkey-actor { width: 400px; height: 400px; background: url('monkey.png') no-repeat center/contain; position: absolute; bottom: -500px; left: 50%; transform: translateX(-50%); transition: 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); filter: drop-shadow(0 20px 50px rgba(0,0,0,0.5)); }
-.monkey-actor.active { bottom: 0; }
-.banana-projectile { width: 200px; height: 200px; background: url('banana.png') no-repeat center/contain; position: absolute; bottom: 300px; left: 50%; transform: translateX(-50%); opacity: 0; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.3)); }
-.banana-projectile.thrown { animation: throwBananaHD 0.8s forwards ease-in; opacity: 1; }
-@keyframes throwBananaHD {
-    0% { transform: translateX(-50%) translateY(0) scale(0.5) rotate(0deg); }
-    100% { transform: translateX(-50%) translateY(-600px) scale(8) rotate(360deg); opacity: 0; }
-}
-.splat-stain { position: absolute; background: url('splat.png') no-repeat center/contain; pointer-events: auto; cursor: pointer; transition: 0.4s ease-out; filter: drop-shadow(0 5px 15px rgba(0,0,0,0.3)); z-index: 10005; }
-.splat-stain:hover { transform: scale(1.1); filter: brightness(1.2); }
-.splat-msg { position: fixed; top: 30px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.9); border: 1px solid var(--primary); color: #fff; padding: 1.2rem 2.5rem; border-radius: 100px; z-index: 10010; display: none; font-weight: 700; box-shadow: 0 0 30px var(--primary-glow); font-family: 'Space Grotesk', sans-serif; letter-spacing: 1px; }
+/* Reveal Animations */
+.reveal { opacity: 0; transform: translateY(30px); transition: 0.8s cubic-bezier(0.2, 0.8, 0.2, 1); }
+.reveal.active { opacity: 1; transform: translateY(0); }
