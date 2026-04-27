@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://eliteweb-corp.vercel.app/sitemap.xml
