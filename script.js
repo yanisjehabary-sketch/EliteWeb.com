@@ -371,4 +371,54 @@ document.addEventListener('DOMContentLoaded', () => {
         roiConversion.addEventListener('input', updateROI);
         updateROI(); // Initial calculation
     }
+
+    // ---- MONKEY BANANA EASTER EGG ----
+    const cubeLeft = document.querySelector('.cube-face-left');
+    const monkeyActor = document.getElementById('monkey-actor');
+    const banana = document.getElementById('banana-projectile');
+    const splatMsg = document.getElementById('splat-msg');
+    const container = document.getElementById('monkey-container');
+
+    if (cubeLeft && monkeyActor && banana && splatMsg) {
+        cubeLeft.addEventListener('click', () => {
+            // Step 1: Monkey appears
+            monkeyActor.classList.add('active');
+            
+            setTimeout(() => {
+                // Step 2: Throw banana
+                banana.classList.add('thrown');
+                
+                setTimeout(() => {
+                    // Step 3: Splat!
+                    banana.classList.remove('thrown');
+                    splatMsg.style.display = 'block';
+                    
+                    // Create splatter stains
+                    for (let i = 0; i < 15; i++) {
+                        const splat = document.createElement('div');
+                        splat.className = 'splat-stain';
+                        const size = Math.random() * 100 + 50;
+                        splat.style.width = `${size}px`;
+                        splat.style.height = `${size}px`;
+                        splat.style.left = `${Math.random() * 100}vw`;
+                        splat.style.top = `${Math.random() * 100}vh`;
+                        splat.style.opacity = Math.random() * 0.5 + 0.3;
+                        
+                        splat.addEventListener('click', () => {
+                            splat.style.transform = 'scale(0)';
+                            setTimeout(() => {
+                                splat.remove();
+                                if (document.querySelectorAll('.splat-stain').length === 0) {
+                                    splatMsg.style.display = 'none';
+                                    monkeyActor.classList.remove('active');
+                                }
+                            }, 300);
+                        });
+                        
+                        container.appendChild(splat);
+                    }
+                }, 800);
+            }, 1000);
+        });
+    }
 });
