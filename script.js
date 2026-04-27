@@ -372,45 +372,49 @@ document.addEventListener('DOMContentLoaded', () => {
         updateROI(); // Initial calculation
     }
 
-    // ---- MONKEY BANANA EASTER EGG ----
+    // ---- MONKEY BANANA EASTER EGG HD ----
     const cubeLeft = document.querySelector('.cube-face-left');
     const monkeyActor = document.getElementById('monkey-actor');
     const banana = document.getElementById('banana-projectile');
     const splatMsg = document.getElementById('splat-msg');
     const container = document.getElementById('monkey-container');
 
+    function cleanEverything() {
+        document.querySelectorAll('.splat-stain').forEach(s => s.remove());
+        splatMsg.style.display = 'none';
+        monkeyActor.classList.remove('active');
+    }
+
     if (cubeLeft && monkeyActor && banana && splatMsg) {
         cubeLeft.addEventListener('click', () => {
-            // Step 1: Monkey appears
+            if (monkeyActor.classList.contains('active')) return;
+            
             monkeyActor.classList.add('active');
             
             setTimeout(() => {
-                // Step 2: Throw banana
                 banana.classList.add('thrown');
                 
                 setTimeout(() => {
-                    // Step 3: Splat!
                     banana.classList.remove('thrown');
                     splatMsg.style.display = 'block';
+                    splatMsg.textContent = "Nettoyez votre écran ! (Cliquez sur les taches ou appuyez sur ESPACE)";
                     
-                    // Create splatter stains
-                    for (let i = 0; i < 15; i++) {
+                    for (let i = 0; i < 12; i++) {
                         const splat = document.createElement('div');
                         splat.className = 'splat-stain';
-                        const size = Math.random() * 100 + 50;
+                        const size = Math.random() * 200 + 150;
                         splat.style.width = `${size}px`;
                         splat.style.height = `${size}px`;
-                        splat.style.left = `${Math.random() * 100}vw`;
-                        splat.style.top = `${Math.random() * 100}vh`;
-                        splat.style.opacity = Math.random() * 0.5 + 0.3;
+                        splat.style.left = `${Math.random() * 90}vw`;
+                        splat.style.top = `${Math.random() * 90}vh`;
+                        splat.style.transform = `rotate(${Math.random() * 360}deg)`;
                         
                         splat.addEventListener('click', () => {
                             splat.style.transform = 'scale(0)';
                             setTimeout(() => {
                                 splat.remove();
                                 if (document.querySelectorAll('.splat-stain').length === 0) {
-                                    splatMsg.style.display = 'none';
-                                    monkeyActor.classList.remove('active');
+                                    cleanEverything();
                                 }
                             }, 300);
                         });
@@ -419,6 +423,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 }, 800);
             }, 1000);
+        });
+
+        // Space shortcut
+        window.addEventListener('keydown', (e) => {
+            if (e.code === 'Space' && splatMsg.style.display === 'block') {
+                e.preventDefault();
+                cleanEverything();
+            }
         });
     }
 });

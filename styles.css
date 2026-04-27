@@ -441,16 +441,16 @@ input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.2); }
     .roi-calculator { grid-template-columns: 1fr; }
 }
 
-/* Monkey Splat Animation */
+/* Monkey Splat Animation HD */
 .monkey-container { position: fixed; inset: 0; z-index: 10000; pointer-events: none; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-.monkey-actor { font-size: 15rem; position: absolute; bottom: -300px; left: 50%; transform: translateX(-50%); transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-.monkey-actor.active { bottom: 50px; }
-.banana-projectile { font-size: 4rem; position: absolute; bottom: 250px; left: 50%; transform: translateX(-50%); opacity: 0; }
-.banana-projectile.thrown { animation: throwBanana 0.8s forwards; opacity: 1; }
-@keyframes throwBanana {
-    0% { transform: translateX(-50%) translateY(0) scale(1); }
-    100% { transform: translateX(-50%) translateY(-300px) scale(5); opacity: 0; }
+.monkey-actor { width: 400px; height: 400px; background: url('monkey.png') no-repeat center/contain; position: absolute; bottom: -500px; left: 50%; transform: translateX(-50%); transition: 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); filter: drop-shadow(0 20px 50px rgba(0,0,0,0.5)); }
+.monkey-actor.active { bottom: 0; }
+.banana-projectile { width: 200px; height: 200px; background: url('banana.png') no-repeat center/contain; position: absolute; bottom: 300px; left: 50%; transform: translateX(-50%); opacity: 0; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.3)); }
+.banana-projectile.thrown { animation: throwBananaHD 0.8s forwards ease-in; opacity: 1; }
+@keyframes throwBananaHD {
+    0% { transform: translateX(-50%) translateY(0) scale(0.5) rotate(0deg); }
+    100% { transform: translateX(-50%) translateY(-600px) scale(8) rotate(360deg); opacity: 0; }
 }
-.splat-stain { position: absolute; background: rgba(255, 230, 0, 0.8); border-radius: 50%; filter: blur(10px); pointer-events: auto; cursor: pointer; }
-.splat-stain::after { content: '🍌'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 2rem; opacity: 0.5; }
-.splat-msg { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.8); color: #fff; padding: 1rem 2rem; border-radius: 10px; z-index: 10001; display: none; }
+.splat-stain { position: absolute; background: url('splat.png') no-repeat center/contain; pointer-events: auto; cursor: pointer; transition: 0.4s ease-out; filter: drop-shadow(0 5px 15px rgba(0,0,0,0.3)); z-index: 10005; }
+.splat-stain:hover { transform: scale(1.1); filter: brightness(1.2); }
+.splat-msg { position: fixed; top: 30px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.9); border: 1px solid var(--primary); color: #fff; padding: 1.2rem 2.5rem; border-radius: 100px; z-index: 10010; display: none; font-weight: 700; box-shadow: 0 0 30px var(--primary-glow); font-family: 'Space Grotesk', sans-serif; letter-spacing: 1px; }
