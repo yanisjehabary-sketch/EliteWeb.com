@@ -444,3 +444,17 @@ input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.2); }
 /* Reveal Animations */
 .reveal { opacity: 0; transform: translateY(30px); transition: 0.8s cubic-bezier(0.2, 0.8, 0.2, 1); }
 .reveal.active { opacity: 1; transform: translateY(0); }
+
+/* Emo Robot Animations */
+#emo-robot {
+    width: 100%;
+    height: 100%;
+    animation: floatEmo 3s ease-in-out infinite;
+    cursor: pointer;
+    pointer-events: auto;
+}
+
+@keyframes floatEmo {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+}

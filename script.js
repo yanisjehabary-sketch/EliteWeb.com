@@ -391,5 +391,36 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Initial call after a delay
         setTimeout(moveEmo, 2000);
+
+        // ---- EMO ROTATION ON CLICK ----
+        const emoRobot = document.getElementById('emo-robot');
+        if (emoRobot) {
+            let isSpinning = false;
+            emoRobot.addEventListener('click', () => {
+                if (isSpinning) return;
+                isSpinning = true;
+                
+                const startOrbit = emoRobot.getCameraOrbit();
+                const duration = 800; // Rapide
+                const startTime = performance.now();
+                const startTheta = startOrbit.theta;
+
+                function animateSpin(currentTime) {
+                    const elapsed = currentTime - startTime;
+                    const progress = Math.min(elapsed / duration, 1);
+                    const ease = progress * (2 - progress); // Ease out
+                    
+                    const currentTheta = startTheta + ease * Math.PI * 2;
+                    emoRobot.cameraOrbit = `${currentTheta}rad ${startOrbit.phi}rad ${startOrbit.radius}m`;
+                    
+                    if (progress < 1) {
+                        requestAnimationFrame(animateSpin);
+                    } else {
+                        isSpinning = false;
+                    }
+                }
+                requestAnimationFrame(animateSpin);
+            });
+        }
     }
 });
