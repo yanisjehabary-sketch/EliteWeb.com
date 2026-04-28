@@ -67,16 +67,37 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // ---- CUBE INTERACTION (FOLLOW MOUSE ON HERO) ----
-    const hero = document.querySelector('.hero');
-    const cube = document.querySelector('.cube');
-    if (hero && cube) {
-        window.addEventListener('mousemove', (e) => {
-            const x = e.clientX / window.innerWidth;
-            const y = e.clientY / window.innerHeight;
-            const rotateX = -(y - 0.5) * 45; 
-            const rotateY = (x - 0.5) * 45;
-            cube.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+    // ---- ROBOT INTERACTION (360 DEGREES ON CLICK) ----
+    const robotModel = document.getElementById('robot-model');
+    if (robotModel) {
+        let isRotating = false;
+        robotModel.addEventListener('click', () => {
+            if (isRotating) return;
+            isRotating = true;
+            
+            const startOrbit = robotModel.getCameraOrbit();
+            const startTheta = startOrbit.theta;
+            const duration = 1000; // 1 seconde
+            const startTime = performance.now();
+            
+            function animateRotation(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                
+                // Ease out cubic
+                const ease = 1 - Math.pow(1 - progress, 3);
+                const currentTheta = startTheta + ease * Math.PI * 2;
+                
+                robotModel.cameraOrbit = `${currentTheta}rad ${startOrbit.phi}rad ${startOrbit.radius}m`;
+                
+                if (progress < 1) {
+                    requestAnimationFrame(animateRotation);
+                } else {
+                    isRotating = false;
+                }
+            }
+            
+            requestAnimationFrame(animateRotation);
         });
     }
 
