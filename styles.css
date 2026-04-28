@@ -70,16 +70,19 @@ body {
 .btn-primary:hover { box-shadow: 0 10px 30px var(--primary-glow); }
 .hero-visual { flex: 0.8; display: flex; justify-content: center; }
 
-/* 3D Robot Model */
-#robot-model {
-    width: 100%;
-    height: 500px;
-    outline: none;
-    cursor: grab;
-}
-#robot-model:active {
-    cursor: grabbing;
-}
+/* 3D Cube */
+.scene { width: 300px; height: 300px; perspective: 1000px; }
+.cube-wrapper { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; animation: rotateSlow 20s linear infinite; }
+.cube { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; }
+.cube-face { position: absolute; width: 300px; height: 300px; background: rgba(14, 165, 233, 0.05); border: 1px solid rgba(14, 165, 233, 0.2); backdrop-filter: blur(10px); display: flex; align-items: center; justify-content: center; font-size: 6rem; color: var(--primary); transition: 0.3s; cursor: pointer; }
+.cube-face:hover { background: rgba(14, 165, 233, 0.15); color: #fff; }
+.cube-face-front  { transform: rotateY(0deg) translateZ(150px); }
+.cube-face-back   { transform: rotateY(180deg) translateZ(150px); }
+.cube-face-right  { transform: rotateY(90deg) translateZ(150px); }
+.cube-face-left   { transform: rotateY(-90deg) translateZ(150px); }
+.cube-face-top    { transform: rotateX(90deg) translateZ(150px); }
+.cube-face-bottom { transform: rotateX(-90deg) translateZ(150px); }
+@keyframes rotateSlow { 0% { transform: rotateX(0) rotateY(0); } 100% { transform: rotateX(360deg) rotateY(360deg); } }
 
 /* Marquee */
 .logo-marquee-container { border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 2rem 0; background: rgba(255,255,255,0.02); margin: 4rem 0; overflow: hidden; }
