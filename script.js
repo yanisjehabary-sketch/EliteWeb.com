@@ -372,55 +372,92 @@ document.addEventListener('DOMContentLoaded', () => {
         updateROI(); // Initial calculation
     }
 
-    // ---- EMO ROBOT WANDERING LOGIC ----
-    const emoContainer = document.getElementById('emo-container');
-    if (emoContainer) {
-        function moveEmo() {
-            const maxX = window.innerWidth - 150;
-            const maxY = window.innerHeight - 150;
-            
-            const randomX = Math.floor(Math.random() * maxX);
-            const randomY = Math.floor(Math.random() * maxY);
-            
-            emoContainer.style.left = `${randomX}px`;
-            emoContainer.style.top = `${randomY}px`;
-            
-            // Repeat between 5 and 10 seconds
-            setTimeout(moveEmo, 5000 + Math.random() * 5000);
-        }
-        
-        // Initial call after a delay
-        setTimeout(moveEmo, 2000);
+    // ---- EMO ASSISTANT LOGIC ----
+    const emoRobot = document.getElementById('emo-robot');
+    const emoBubble = document.getElementById('emo-bubble');
+    const emoBall = document.getElementById('emo-ball');
+    const emoMouth = document.getElementById('emo-mouth');
+    
+    if (emoRobot && emoBubble && emoBall && emoMouth) {
+        let isSpeaking = false;
+        let isJuggling = true;
+        let juggleAngle = 0;
 
-        // ---- EMO ROTATION ON CLICK ----
-        const emoRobot = document.getElementById('emo-robot');
-        if (emoRobot) {
-            let isSpinning = false;
-            emoRobot.addEventListener('click', () => {
-                if (isSpinning) return;
-                isSpinning = true;
-                
-                const startOrbit = emoRobot.getCameraOrbit();
-                const duration = 800; // Rapide
-                const startTime = performance.now();
-                const startTheta = startOrbit.theta;
-
-                function animateSpin(currentTime) {
-                    const elapsed = currentTime - startTime;
-                    const progress = Math.min(elapsed / duration, 1);
-                    const ease = progress * (2 - progress); // Ease out
-                    
-                    const currentTheta = startTheta + ease * Math.PI * 2;
-                    emoRobot.cameraOrbit = `${currentTheta}rad ${startOrbit.phi}rad ${startOrbit.radius}m`;
-                    
-                    if (progress < 1) {
-                        requestAnimationFrame(animateSpin);
-                    } else {
-                        isSpinning = false;
-                    }
-                }
-                requestAnimationFrame(animateSpin);
-            });
+        // 1. Mouth Animation (Speak)
+        function speak(text, duration = 3000) {
+            isSpeaking = true;
+            emoBubble.textContent = text;
+            emoBubble.classList.add('active');
+            
+            const mouthInterval = setInterval(() => {
+                emoMouth.style.height = (2 + Math.random() * 8) + 'px';
+            }, 100);
+            
+            setTimeout(() => {
+                clearInterval(mouthInterval);
+                emoMouth.style.height = '2px';
+                isSpeaking = false;
+                emoBubble.classList.remove('active');
+            }, duration);
         }
+
+        // 2. Juggling Animation
+        function animateJuggle() {
+            if (isJuggling) {
+                emoBall.style.display = 'block';
+                juggleAngle += 0.1;
+                const x = Math.cos(juggleAngle) * 60;
+                const y = Math.abs(Math.sin(juggleAngle)) * -100 - 50;
+                emoBall.style.transform = `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`;
+            } else {
+                emoBall.style.display = 'none';
+            }
+            requestAnimationFrame(animateJuggle);
+        }
+        animateJuggle();
+
+        // 3. Random Idle Behavior
+        setInterval(() => {
+            if (!isSpeaking && isJuggling) {
+                const phrases = ["Besoin d'aide ?", "Regardez ce que je sais faire !", "EliteWeb est là pour vous.", "Une question ?"];
+                speak(phrases[Math.floor(Math.random() * phrases.length)], 2000);
+            }
+        }, 8000);
+
+        // 4. Click Interaction
+        emoRobot.addEventListener('click', () => {
+            isJuggling = false;
+            speak("Avez-vous besoin d'aide ou de renseignements ?", 5000);
+            
+            // Add buttons to bubble for "Intelligence Tarifs"
+            setTimeout(() => {
+                emoBubble.innerHTML = `
+                    <div style="display:flex; flex-direction:column; gap:5px;">
+                        <span>Besoin d'aide ?</span>
+                        <button id="btn-tarifs" style="background:var(--primary); border:none; color:#fff; border-radius:5px; padding:3px; cursor:pointer; font-size:0.7rem;">Voir les tarifs</button>
+                        <button id="btn-reset" style="background:#444; border:none; color:#fff; border-radius:5px; padding:3px; cursor:pointer; font-size:0.7rem;">Reprendre jonglage</button>
+                    </div>
+                `;
+                emoBubble.classList.add('active');
+                emoBubble.style.pointerEvents = 'auto';
+
+                document.getElementById('btn-tarifs').addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    speak("Voulez-vous que je vous redirige vers la page des tarifs ?", 3000);
+                    setTimeout(() => {
+                        if (confirm("Redirection vers les tarifs ?")) {
+                            window.location.href = "services.html#tarifs";
+                        }
+                    }, 3100);
+                });
+
+                document.getElementById('btn-reset').addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    isJuggling = true;
+                    emoBubble.classList.remove('active');
+                    emoBubble.style.pointerEvents = 'none';
+                });
+            }, 1000);
+        });
     }
 });
