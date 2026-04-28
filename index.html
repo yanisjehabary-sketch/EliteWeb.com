@@ -276,15 +276,6 @@
 
 
 
-    <!-- Hellboy 3D Avatar -->
-    <div id="hellboy-container" style="position: fixed; bottom: 20px; left: 20px; width: 100px; height: 100px; z-index: 9999; cursor: pointer;">
-        <model-viewer id="hellboy-model" src="Hellboy.glb" 
-            camera-orbit="0deg 75deg 2m" 
-            auto-rotate 
-            style="width: 100%; height: 100%; --poster-color: transparent;" 
-            shadow-intensity="1" environment-image="neutral" exposure="1">
-        </model-viewer>
-    </div>
 
     <footer>
         <div class="footer-content">
@@ -292,26 +283,7 @@
         </div>
     </footer>
 
-    <script type="module" src="script.js?v=4"></script>
-    <script>
-    window.addEventListener('DOMContentLoaded', () => {
-        VANTA.DOTS({
-            el: ".bg-animation",
-            mouseControls: true,
-            touchControls: true,
-            gyroControls: false,
-            minHeight: 200.00,
-            minWidth: 200.00,
-            scale: 1.00,
-            scaleMobile: 1.00,
-            color: 0x0ea5e9,
-            color2: 0x5959af,
-            backgroundColor: 0x030712,
-            size: 8.20,
-            spacing: 74.00
-        })
-    });
-    </script>
+    <script src="vanta-init.js"></script>
     <script src="https://js.stripe.com/v3/"></script>
     <script src="stripe-handler.js"></script>
 </body>
