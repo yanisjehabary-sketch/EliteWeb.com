@@ -372,92 +372,81 @@ document.addEventListener('DOMContentLoaded', () => {
         updateROI(); // Initial calculation
     }
 
-    // ---- EMO ASSISTANT LOGIC ----
+    // ---- EMO PRO ASSISTANT (GSAP) ----
+    const emoAssistant = document.getElementById('emo-assistant');
     const emoRobot = document.getElementById('emo-robot');
     const emoBubble = document.getElementById('emo-bubble');
-    const emoBall = document.getElementById('emo-ball');
     const emoMouth = document.getElementById('emo-mouth');
     
-    if (emoRobot && emoBubble && emoBall && emoMouth) {
-        let isSpeaking = false;
-        let isJuggling = true;
-        let juggleAngle = 0;
+    if (emoRobot && emoAssistant) {
+        // 1. Professional Levitation
+        gsap.to(emoRobot, {
+            y: -15,
+            duration: 2,
+            repeat: -1,
+            yoyo: true,
+            ease: "sine.inOut"
+        });
 
-        // 1. Mouth Animation (Speak)
-        function speak(text, duration = 3000) {
-            isSpeaking = true;
-            emoBubble.textContent = text;
+        // 2. Look-at-Mouse Interaction (Fluid)
+        window.addEventListener('mousemove', (e) => {
+            const rect = emoAssistant.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+            
+            const angleX = (e.clientX - centerX) / window.innerWidth * 30;
+            const angleY = (e.clientY - centerY) / window.innerHeight * 30;
+            
+            gsap.to(emoRobot, {
+                rotateY: angleX + 180, // 180 is default front view
+                rotateX: -angleY,
+                duration: 0.5,
+                ease: "power2.out"
+            });
+        });
+
+        // 3. Smart Speaking Function
+        function emoSpeak(text, time = 4000) {
+            emoBubble.innerHTML = text;
             emoBubble.classList.add('active');
             
-            const mouthInterval = setInterval(() => {
-                emoMouth.style.height = (2 + Math.random() * 8) + 'px';
-            }, 100);
+            // Mouth chatter
+            const mouthTL = gsap.timeline({ repeat: -1 });
+            mouthTL.to(emoMouth, { height: 10, duration: 0.1 })
+                   .to(emoMouth, { height: 2, duration: 0.1 });
             
             setTimeout(() => {
-                clearInterval(mouthInterval);
-                emoMouth.style.height = '2px';
-                isSpeaking = false;
                 emoBubble.classList.remove('active');
-            }, duration);
+                mouthTL.kill();
+                gsap.to(emoMouth, { height: 2, duration: 0.3 });
+            }, time);
         }
 
-        // 2. Juggling Animation
-        function animateJuggle() {
-            if (isJuggling) {
-                emoBall.style.display = 'block';
-                juggleAngle += 0.1;
-                const x = Math.cos(juggleAngle) * 60;
-                const y = Math.abs(Math.sin(juggleAngle)) * -100 - 50;
-                emoBall.style.transform = `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`;
-            } else {
-                emoBall.style.display = 'none';
-            }
-            requestAnimationFrame(animateJuggle);
-        }
-        animateJuggle();
-
-        // 3. Random Idle Behavior
+        // Idle Phrases
         setInterval(() => {
-            if (!isSpeaking && isJuggling) {
-                const phrases = ["Besoin d'aide ?", "Regardez ce que je sais faire !", "EliteWeb est là pour vous.", "Une question ?"];
-                speak(phrases[Math.floor(Math.random() * phrases.length)], 2000);
+            if (!emoBubble.classList.contains('active')) {
+                const ideas = ["Besoin d'un conseil ?", "Je peux vous guider !", "EliteWeb : la performance.", "Cliquez sur moi !"];
+                emoSpeak(ideas[Math.floor(Math.random() * ideas.length)], 2500);
             }
-        }, 8000);
+        }, 12000);
 
-        // 4. Click Interaction
+        // 4. Click Event (Professional Feedback)
         emoRobot.addEventListener('click', () => {
-            isJuggling = false;
-            speak("Avez-vous besoin d'aide ou de renseignements ?", 5000);
-            
-            // Add buttons to bubble for "Intelligence Tarifs"
-            setTimeout(() => {
-                emoBubble.innerHTML = `
-                    <div style="display:flex; flex-direction:column; gap:5px;">
-                        <span>Besoin d'aide ?</span>
-                        <button id="btn-tarifs" style="background:var(--primary); border:none; color:#fff; border-radius:5px; padding:3px; cursor:pointer; font-size:0.7rem;">Voir les tarifs</button>
-                        <button id="btn-reset" style="background:#444; border:none; color:#fff; border-radius:5px; padding:3px; cursor:pointer; font-size:0.7rem;">Reprendre jonglage</button>
-                    </div>
-                `;
-                emoBubble.classList.add('active');
-                emoBubble.style.pointerEvents = 'auto';
+            // Spin effect
+            gsap.to(emoRobot, {
+                rotateY: "+=360",
+                duration: 1,
+                ease: "back.out(1.7)"
+            });
 
-                document.getElementById('btn-tarifs').addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    speak("Voulez-vous que je vous redirige vers la page des tarifs ?", 3000);
-                    setTimeout(() => {
-                        if (confirm("Redirection vers les tarifs ?")) {
-                            window.location.href = "services.html#tarifs";
-                        }
-                    }, 3100);
-                });
-
-                document.getElementById('btn-reset').addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    isJuggling = true;
-                    emoBubble.classList.remove('active');
-                    emoBubble.style.pointerEvents = 'none';
-                });
-            }, 1000);
+            emoSpeak(`
+                <strong>Bonjour !</strong><br>
+                Avez-vous besoin de renseignements ?<br>
+                <div style="margin-top:10px; display:flex; gap:5px;">
+                    <button onclick="window.location.href='services.html#tarifs'" style="background:#0ea5e9; border:none; color:#fff; border-radius:5px; padding:5px 10px; cursor:pointer; font-size:0.75rem;">Voir les tarifs</button>
+                    <button onclick="this.parentElement.parentElement.classList.remove('active')" style="background:#333; border:none; color:#fff; border-radius:5px; padding:5px 10px; cursor:pointer; font-size:0.75rem;">Fermer</button>
+                </div>
+            `, 6000);
         });
     }
 });
