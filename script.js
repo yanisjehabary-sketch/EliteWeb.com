@@ -372,5 +372,24 @@ document.addEventListener('DOMContentLoaded', () => {
         updateROI(); // Initial calculation
     }
 
-
+    // ---- EMO ROBOT WANDERING LOGIC ----
+    const emoContainer = document.getElementById('emo-container');
+    if (emoContainer) {
+        function moveEmo() {
+            const maxX = window.innerWidth - 150;
+            const maxY = window.innerHeight - 150;
+            
+            const randomX = Math.floor(Math.random() * maxX);
+            const randomY = Math.floor(Math.random() * maxY);
+            
+            emoContainer.style.left = `${randomX}px`;
+            emoContainer.style.top = `${randomY}px`;
+            
+            // Repeat between 5 and 10 seconds
+            setTimeout(moveEmo, 5000 + Math.random() * 5000);
+        }
+        
+        // Initial call after a delay
+        setTimeout(moveEmo, 2000);
+    }
 });
