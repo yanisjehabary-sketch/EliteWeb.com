@@ -22,10 +22,13 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!document.getElementById('hellboy-container')) {
         const hellboyDiv = document.createElement('div');
         hellboyDiv.id = 'hellboy-container';
-        hellboyDiv.style.cssText = "position: fixed; bottom: 20px; left: 20px; width: 200px; height: 200px; z-index: 9999; cursor: grab; transition: opacity 0.3s;";
+        hellboyDiv.style.cssText = "position: fixed; bottom: 20px; left: 20px; width: 220px; height: 220px; z-index: 9999; cursor: grab; transition: opacity 0.3s;";
         
         hellboyDiv.innerHTML = `
-            <div id="hellboy-menu" style="position:absolute; top:-130px; left:0; background:rgba(3,7,18,0.9); border:1px solid #0ea5e9; padding:10px; border-radius:10px; display:none; flex-direction:column; gap:5px; width:150px; z-index:10000; backdrop-filter:blur(10px); pointer-events:auto;">
+            <div id="hellboy-hint" style="position:absolute; top:-30px; left:50%; transform:translateX(-50%); background:#0ea5e9; color:white; padding:4px 10px; border-radius:20px; font-size:0.6rem; white-space:nowrap; pointer-events:none; animation: float 2s infinite ease-in-out;">
+                <i class="fa-solid fa-hand-pointer"></i> Déplace-moi !
+            </div>
+            <div id="hellboy-menu" style="position:absolute; top:-160px; left:0; background:rgba(3,7,18,0.9); border:1px solid #0ea5e9; padding:10px; border-radius:10px; display:none; flex-direction:column; gap:5px; width:150px; z-index:10000; backdrop-filter:blur(10px); pointer-events:auto;">
                 <button onclick="changeHellboySize()" style="background:#0ea5e9; border:none; color:#fff; padding:5px; border-radius:5px; cursor:pointer; font-size:0.7rem;">Changer Taille</button>
                 <button onclick="changeHellboyColor()" style="background:#5959af; border:none; color:#fff; padding:5px; border-radius:5px; cursor:pointer; font-size:0.7rem;">Changer Couleur</button>
                 <button onclick="disableHellboy()" style="background:#ef4444; border:none; color:#fff; padding:5px; border-radius:5px; cursor:pointer; font-size:0.7rem;">Désactiver</button>
@@ -38,12 +41,35 @@ document.addEventListener('DOMContentLoaded', () => {
                 style="width: 100%; height: 100%; --poster-color: transparent;" 
                 shadow-intensity="1" environment-image="neutral" exposure="1">
             </model-viewer>
+            <style>
+                @keyframes float {
+                    0%, 100% { transform: translate(-50%, 0); }
+                    50% { transform: translate(-50%, -10px); }
+                }
+            </style>
         `;
 
         const model = hellboyDiv.querySelector('#hellboy-model');
         const menu = hellboyDiv.querySelector('#hellboy-menu');
-        let currentSize = 200;
+        const hint = hellboyDiv.querySelector('#hellboy-hint');
+        let currentSize = 220;
         let currentHue = 0;
+        let animationIndex = 0;
+
+        // ANIMATION CYCLING LOGIC
+        model.addEventListener('load', () => {
+            const anims = model.availableAnimations;
+            if (anims.length > 0) {
+                model.animationName = anims[0];
+                model.play();
+                
+                model.addEventListener('finished', () => {
+                    animationIndex = (animationIndex + 1) % anims.length;
+                    model.animationName = anims[animationIndex];
+                    model.play();
+                });
+            }
+        });
 
         // DRAG AND DROP LOGIC
         let isDragging = false;
@@ -52,6 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
         hellboyDiv.addEventListener('mousedown', (e) => {
             if (e.target.tagName === 'BUTTON') return;
             isDragging = true;
+            hint.style.display = 'none'; // Hide hint once dragged
             hellboyDiv.style.cursor = 'grabbing';
             hellboyDiv.style.transition = 'none';
             offsetX = e.clientX - hellboyDiv.getBoundingClientRect().left;
@@ -62,7 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!isDragging) return;
             hellboyDiv.style.left = `${e.clientX - offsetX}px`;
             hellboyDiv.style.top = `${e.clientY - offsetY}px`;
-            hellboyDiv.style.bottom = 'auto'; // Disable fixed bottom
+            hellboyDiv.style.bottom = 'auto';
         });
 
         window.addEventListener('mouseup', () => {
@@ -72,23 +99,18 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         // Click to toggle menu
-        hellboyDiv.addEventListener('contextmenu', (e) => {
-            e.preventDefault();
-            toggleHellboyMenu();
-        });
-        
         model.addEventListener('click', (e) => {
             if (isDragging) return;
             toggleHellboyMenu();
         });
 
-        // Global functions for the menu
+        // Global functions
         window.toggleHellboyMenu = () => {
             menu.style.display = menu.style.display === 'none' ? 'flex' : 'none';
         };
 
         window.changeHellboySize = () => {
-            currentSize = currentSize >= 350 ? 150 : currentSize + 50;
+            currentSize = currentSize >= 400 ? 150 : currentSize + 50;
             hellboyDiv.style.width = `${currentSize}px`;
             hellboyDiv.style.height = `${currentSize}px`;
         };
