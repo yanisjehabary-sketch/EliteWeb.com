@@ -22,17 +22,19 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!document.getElementById('hellboy-container')) {
         const hellboyDiv = document.createElement('div');
         hellboyDiv.id = 'hellboy-container';
-        hellboyDiv.style.cssText = "position: fixed; bottom: 20px; left: 20px; width: 220px; height: 220px; z-index: 9999; cursor: grab; transition: opacity 0.3s;";
+        hellboyDiv.style.cssText = "position: fixed; bottom: 20px; left: 20px; width: 220px; height: 220px; z-index: 9999; cursor: grab; transition: opacity 0.3s, transform 0.3s;";
         
         hellboyDiv.innerHTML = `
-            <div id="hellboy-hint" style="position:absolute; top:-30px; left:50%; transform:translateX(-50%); background:#0ea5e9; color:white; padding:4px 10px; border-radius:20px; font-size:0.6rem; white-space:nowrap; pointer-events:none; animation: float 2s infinite ease-in-out;">
-                <i class="fa-solid fa-hand-pointer"></i> Déplace-moi !
+            <div id="hellboy-tutorial-cursor" style="position:absolute; top:50%; left:50%; font-size:2rem; color:#0ea5e9; pointer-events:none; z-index:10001; opacity:0; transform:translate(-50%, -50%);">
+                <i class="fa-solid fa-arrow-pointer"></i>
             </div>
-            <div id="hellboy-menu" style="position:absolute; top:-160px; left:0; background:rgba(3,7,18,0.9); border:1px solid #0ea5e9; padding:10px; border-radius:10px; display:none; flex-direction:column; gap:5px; width:150px; z-index:10000; backdrop-filter:blur(10px); pointer-events:auto;">
-                <button onclick="changeHellboySize()" style="background:#0ea5e9; border:none; color:#fff; padding:5px; border-radius:5px; cursor:pointer; font-size:0.7rem;">Changer Taille</button>
-                <button onclick="changeHellboyColor()" style="background:#5959af; border:none; color:#fff; padding:5px; border-radius:5px; cursor:pointer; font-size:0.7rem;">Changer Couleur</button>
-                <button onclick="disableHellboy()" style="background:#ef4444; border:none; color:#fff; padding:5px; border-radius:5px; cursor:pointer; font-size:0.7rem;">Désactiver</button>
-                <button onclick="toggleHellboyMenu()" style="background:#333; border:none; color:#fff; padding:5px; border-radius:5px; cursor:pointer; font-size:0.7rem;">Fermer</button>
+            <div id="hellboy-menu" style="position:absolute; top:-180px; left:0; background:rgba(3,7,18,0.95); border:1px solid #0ea5e9; padding:15px; border-radius:15px; display:none; flex-direction:column; gap:10px; width:180px; z-index:10000; backdrop-filter:blur(15px); box-shadow: 0 10px 25px rgba(0,0,0,0.5);">
+                <div style="color:#fff; font-size:0.7rem; margin-bottom:5px;">Taille du personnage</div>
+                <input type="range" id="size-slider" min="100" max="450" value="220" style="width:100%; cursor:pointer; accent-color:#0ea5e9;">
+                
+                <button onclick="changeHellboyColor()" style="background: linear-gradient(135deg, #0ea5e9, #5959af); border:none; color:#fff; padding:8px; border-radius:8px; cursor:pointer; font-size:0.75rem; font-weight:600;">Changer Couleur</button>
+                <button onclick="disableHellboy()" style="background:#ef4444; border:none; color:#fff; padding:8px; border-radius:8px; cursor:pointer; font-size:0.75rem; font-weight:600;">Désactiver</button>
+                <button onclick="toggleHellboyMenu()" style="background:#333; border:none; color:#fff; padding:8px; border-radius:8px; cursor:pointer; font-size:0.75rem; font-weight:600;">Fermer</button>
             </div>
             <model-viewer id="hellboy-model" src="Hellboy.glb" 
                 camera-orbit="0deg 90deg auto" 
@@ -42,27 +44,57 @@ document.addEventListener('DOMContentLoaded', () => {
                 shadow-intensity="1" environment-image="neutral" exposure="1">
             </model-viewer>
             <style>
-                @keyframes float {
-                    0%, 100% { transform: translate(-50%, 0); }
-                    50% { transform: translate(-50%, -10px); }
+                @keyframes demo-move {
+                    0%, 100% { transform: translateX(0); }
+                    25% { transform: translateX(30px); }
+                    75% { transform: translateX(-30px); }
+                }
+                @keyframes demo-cursor {
+                    0%, 100% { opacity: 0; }
+                    10%, 90% { opacity: 1; }
+                }
+                .hellboy-demo-active {
+                    animation: demo-move 3s infinite ease-in-out;
+                }
+                .cursor-demo-active {
+                    animation: demo-cursor 3s infinite ease-in-out;
                 }
             </style>
         `;
 
         const model = hellboyDiv.querySelector('#hellboy-model');
         const menu = hellboyDiv.querySelector('#hellboy-menu');
-        const hint = hellboyDiv.querySelector('#hellboy-hint');
-        let currentSize = 220;
+        const tutCursor = hellboyDiv.querySelector('#hellboy-tutorial-cursor');
+        const sizeSlider = hellboyDiv.querySelector('#size-slider');
+        
         let currentHue = 0;
         let animationIndex = 0;
 
-        // ANIMATION CYCLING LOGIC
+        // START DEMO ANIMATION
+        setTimeout(() => {
+            hellboyDiv.classList.add('hellboy-demo-active');
+            tutCursor.classList.add('cursor-demo-active');
+        }, 1500);
+
+        const stopDemo = () => {
+            hellboyDiv.classList.remove('hellboy-demo-active');
+            tutCursor.classList.remove('cursor-demo-active');
+            tutCursor.style.display = 'none';
+        };
+
+        // SIZE SLIDER
+        sizeSlider.addEventListener('input', (e) => {
+            const val = e.target.value;
+            hellboyDiv.style.width = `${val}px`;
+            hellboyDiv.style.height = `${val}px`;
+        });
+
+        // ANIMATION CYCLING
         model.addEventListener('load', () => {
             const anims = model.availableAnimations;
             if (anims.length > 0) {
                 model.animationName = anims[0];
                 model.play();
-                
                 model.addEventListener('finished', () => {
                     animationIndex = (animationIndex + 1) % anims.length;
                     model.animationName = anims[animationIndex];
@@ -71,16 +103,16 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // DRAG AND DROP LOGIC
+        // DRAG AND DROP
         let isDragging = false;
         let offsetX, offsetY;
 
         hellboyDiv.addEventListener('mousedown', (e) => {
-            if (e.target.tagName === 'BUTTON') return;
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'BUTTON') return;
             isDragging = true;
-            hint.style.display = 'none'; // Hide hint once dragged
+            stopDemo();
             hellboyDiv.style.cursor = 'grabbing';
-            hellboyDiv.style.transition = 'none';
+            hellboyDiv.style.transition = 'opacity 0.3s';
             offsetX = e.clientX - hellboyDiv.getBoundingClientRect().left;
             offsetY = e.clientY - hellboyDiv.getBoundingClientRect().top;
         });
@@ -95,24 +127,16 @@ document.addEventListener('DOMContentLoaded', () => {
         window.addEventListener('mouseup', () => {
             isDragging = false;
             hellboyDiv.style.cursor = 'grab';
-            hellboyDiv.style.transition = 'opacity 0.3s';
         });
 
-        // Click to toggle menu
         model.addEventListener('click', (e) => {
             if (isDragging) return;
+            stopDemo();
             toggleHellboyMenu();
         });
 
-        // Global functions
         window.toggleHellboyMenu = () => {
             menu.style.display = menu.style.display === 'none' ? 'flex' : 'none';
-        };
-
-        window.changeHellboySize = () => {
-            currentSize = currentSize >= 400 ? 150 : currentSize + 50;
-            hellboyDiv.style.width = `${currentSize}px`;
-            hellboyDiv.style.height = `${currentSize}px`;
         };
 
         window.changeHellboyColor = () => {
