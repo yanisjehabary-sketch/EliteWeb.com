@@ -32,8 +32,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 <button onclick="toggleHellboyMenu()" style="background:#333; border:none; color:#fff; padding:5px; border-radius:5px; cursor:pointer; font-size:0.7rem;">Fermer</button>
             </div>
             <model-viewer id="hellboy-model" src="Hellboy.glb" 
-                camera-orbit="0deg 75deg 2.5m" 
-                camera-controls
+                camera-orbit="0deg 90deg auto" 
+                camera-target="0m 0.8m 0m"
                 autoplay
                 style="width: 100%; height: 100%; --poster-color: transparent;" 
                 shadow-intensity="1" environment-image="neutral" exposure="1">
