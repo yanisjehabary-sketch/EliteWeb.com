@@ -17,12 +17,21 @@ import { animate, spring, inView, stagger } from "https://cdn.jsdelivr.net/npm/m
 document.addEventListener('DOMContentLoaded', () => {
     const preloader = document.getElementById('preloader');
     if (preloader) {
-        setTimeout(() => {
+        // Sécurité : forcer la disparition après 2 secondes max
+        const forceRemove = setTimeout(() => {
             preloader.style.opacity = '0';
+            setTimeout(() => { preloader.style.display = 'none'; }, 500);
+        }, 2000);
+
+        window.addEventListener('load', () => {
+            clearTimeout(forceRemove);
             setTimeout(() => {
-                preloader.style.display = 'none';
+                preloader.style.opacity = '0';
+                setTimeout(() => {
+                    preloader.style.display = 'none';
+                }, 500);
             }, 500);
-        }, 1200);
+        });
     }
 
     // Gérer les liens internes pour afficher le preloader
